@@ -1,14 +1,13 @@
 use bevy::prelude::*;
 
 /// # CameraPlugin
-/// Extremely basic plugin for camera manipulation
+/// Extremely basic plugin for player manipulation
 /// ## Game controls:
 /// - W: moves camera along +z
 /// - S: moves camera along -z
 /// - A: moves camera along +x
 /// - D: moves camera along -x
-/// - R: moves camera along +y
-/// - F: moves camera along -y
+/// - Space: jumps
 pub struct CameraPlugin;
 
 impl Plugin for CameraPlugin {
@@ -45,10 +44,14 @@ impl Camera {
                 KeyCode::KeyD => camera.translation.x += 5.0,
                 KeyCode::KeyS => camera.translation.z -= 5.0,
                 KeyCode::KeyW => camera.translation.z += 5.0,
-                KeyCode::KeyR => camera.translation.y += 5.0,
-                KeyCode::KeyF => camera.translation.y -= 5.0,
+                KeyCode::Space => camera_jump(&mut camera);
                 _ => break,
             }
         }
     }
+}
+
+static jump: bool = false;
+fn camera_jump(&mut cam: WorldQuery::Item) {
+
 }
