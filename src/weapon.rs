@@ -4,20 +4,27 @@ mod ammo;
 
 #[derive(Component)]
 pub struct Weapon {
-  weapon_id: WeaponType,
+  weapon_info: WeaponInfo,
   ammo: ammo::Ammo,
-  damage: u8,
-  range: f32,
-  reload: f32,
 }
 
 impl Weapon {
-  pub fn melee() {
-    
+  pub fn weapon_system(
+    mut commands: Commands,
+    key: Res<Input<KeyCode>>,
+    query: Query<(Entity, &Weapon)>
+  ) {
+
   }
 }
 
+pub enum WeaponType {
+  melee(WeaponInfo),
+  range(WeaponInfo),
+}
+
 pub struct WeaponInfo {
+  weapon_id: u8,
   name: String,
   range: f32,
   damage: u8,
