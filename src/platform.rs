@@ -1,4 +1,5 @@
-struct platform;
+use bevy::prelude::*;
+pub struct platform;
 commands.spawn((
         SpriteBundle {
             sprite: Sprite {
