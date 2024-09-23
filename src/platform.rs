@@ -4,7 +4,7 @@ pub struct PlatformPlugin;
 
 impl Plugin for PlatformPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(spawn_platform.in_system_set(CoreSet::Update));
+        app.add_system(Startup, spawn_platform);
     }
 }
 
@@ -22,6 +22,7 @@ fn spawn_platform(mut commands: Commands) {
             transform: Transform::from_xyz(0.0, -100.0, 0.0), // Position below the player
             ..Default::default()
         },
+        Collider::cuboid(400.0, 25.0, 0.1)
         Platform,
     ));
 }
