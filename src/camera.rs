@@ -1,5 +1,8 @@
 use bevy::prelude::*;
 
+const __CAMERA_SPEED__: f32 = 2.0;
+static JUMP: bool = false;
+
 /// # CameraPlugin
 /// Extremely basic plugin for player manipulation
 /// ## Game controls:
@@ -28,8 +31,9 @@ impl Camera {
                                      .looking_at(Vec3::ZERO, Vec3::Y),
                 ..Default::default()
             },
-            Camera,
-        ));
+            ..Default::default(),
+        )).insert(Collider::cuboid(0.5, 0.5, 0.5))
+          .insert(Camera);
     }
 
     pub fn move_camera(keys: Res<ButtonInput<KeyCode>>,
@@ -37,21 +41,46 @@ impl Camera {
                       ) 
     {
         let mut camera = camera_query.single_mut();
+        let mut direction = Vec3::ZERO;
 
         for key in keys.get_pressed() {
             match key {
-                KeyCode::KeyA => camera.translation.x -= 5.0,
-                KeyCode::KeyD => camera.translation.x += 5.0,
-                KeyCode::KeyS => camera.translation.z -= 5.0,
-                KeyCode::KeyW => camera.translation.z += 5.0,
+                KeyCode::KeyW => direction.z -= 1.0,
+                KeyCode::KeyS => direction.z += 1.0,
+                KeyCode::KeyA => direction.x -= 1.0,
+                KeyCode::KeyD => direction.x += 1.0,
                 KeyCode::Space => camera_jump(&mut camera);
                 _ => break,
+            }
+        }
+
+        // Normalize direction and apply speed
+        if direction != Vec3::ZERO {
+            // Change speed at top
+            direction = direction.normalize() * __CAMERA_SPEED__;
+            transform.translation += direction;
+        }
+    }
+
+    pub fn collision_detection(
+        mut commands: Commands,
+        events: Res<Events<CollisionEvent>>,
+        mut reader: Local<EventReader<CollisionEvents>>,
+    ) {
+        for event in collision_reader.iter(&collision_events) {
+            match *event {
+                CollisionEvent::Started(_, _) => {
+                    println!("Collision detected!");
+                    // Handle collision logic here (e.g., prevent movement)
+                }
+                CollisionEvent::Stopped(_, _) => {
+                    println!("Collision ended.");
+                }
             }
         }
     }
 }
 
-static jump: bool = false;
-fn camera_jump(&mut cam: WorldQuery::Item) {
+fn camera_jump(cam: &mut WorldQuery::Item) {
 
 }
