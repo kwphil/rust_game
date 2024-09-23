@@ -2,6 +2,7 @@ use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 
 mod camera;
+mod platform;
 
 fn main() {
     App::new()
