@@ -8,6 +8,8 @@ impl<'a, T, E> Res<'a, T, E> {
         if e != None {
             panic!("{}", e);
         }
+
+        T
     }
 
     pub fn unwrap_or_else<F>(&self, f: F) -> T 
@@ -16,7 +18,10 @@ impl<'a, T, E> Res<'a, T, E> {
     {
         if e != None {
             f(self.e)
+            return T::new();
         }
+
+        T
     }
 }
 
