@@ -1,3 +1,5 @@
+use std::fs;
+
 pub struct Res<'a, T, E> {
     t: Option<&'a T>,
     e: Option<&'a E>,
@@ -7,6 +9,7 @@ impl<'a, T, E> Res<'a, T, E> {
     pub fn unwrap(&self) -> T {
         if e != None {
             panic!("{}", e);
+            fs::write("log/log.txt", format!("{}", e).bytes());
         }
 
         T
@@ -18,6 +21,7 @@ impl<'a, T, E> Res<'a, T, E> {
     {
         if e != None {
             f(self.e)
+            fs::write("log/log.txt", format!("{}", e).bytes());
             return T::new();
         }
 
