@@ -14,7 +14,9 @@ impl Weapon {
     key: Res<Input<KeyCode>>,
     query: Query<(Entity, &Weapon)>
   ) {
-
+  fn fire(){
+    
+  }
   }
 }
 
