@@ -16,8 +16,8 @@ pub struct CameraPlugin;
 impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(Camera::setup_camera)
-           .add_system(Camera::move_camera)
-           .add_system(Camera::camera_velocity_shrink);
+           .add_systems(Camera::move_camera)
+           .add_systems(Camera::camera_velocity_shrink);
     }
 }
 
@@ -65,19 +65,40 @@ impl Camera {
         }
     }
 
+    // TODO: variable entity needs an entity on line 105
     pub fn camera_velocity_shrink(
         mut camera_query: Query<(&mut Velocity, &Transform), With<Camera>>,
         rapier_context: Res<RapierContext>,
     ) {
         let (mut vel, transform) = camera_query.single_mut();
+
+        // Dummy for readability
+        let dir = &mut vel;
+
+        // Checking if velocities are exceeding what they need to be
+        if dir.x > 1.0 {
+            dir.x = 1.0;
+        }
+
+        if dir.x < -1.0 {
+            dir.x = -1.0;
+        }
+
+        if dir.z > 1.0 {
+            dir.z = 1.0;
+        }
+
+        if dir.z < -1.0 {
+            dir.z = 1.0;
+        }
         
         // Dampen the velocities
-        vel.linvel.x *= 0.9;
-        vel.linvel.z *= 0.9;
+        dir.x *= 0.5;
+        dir.z *= 0.5;
 
         // Check if the camera is touching the floor
         let position = transform.translation;
-        let collider_half_height = 0.5; // Assuming a cuboid collider
+        let collider_half_height = 0.5; 
 
         // Check for intersection with colliders below the entity
         let below = position.y - collider_half_height - 0.01; // Slight offset to check just below
@@ -88,7 +109,7 @@ impl Camera {
         for collider in intersecting {
             if collider.position.y >= below {
                 // Set Y velocity to zero if on the ground
-                vel.linvel.y = 0.0;
+                dir.y = 0.0;
                 break;
             }
         }
