@@ -1,6 +1,8 @@
 use bevy::prelude::*;
+use serde_json::{Result, Value};
 
 mod ammo;
+mod character;
 
 #[derive(Component)]
 pub struct Weapon {
@@ -9,14 +11,29 @@ pub struct Weapon {
 }
 
 impl Weapon {
-  pub fn weapon_system(
+  pub fn player_fire(
     mut commands: Commands,
-    key: Res<Input<KeyCode>>,
-    query: Query<(Entity, &Weapon)>
+    buttons: Res<ButtonInput<MouseButton>>,
+    mut query: Query<&mut Character>,
+  ){
+    if buttons.just_pressed(MouseButton::Left) {
+      Self::fire(&mut query.single_mut().weapons, &mut commands);
+    }
+  }
+
+  pub fn fire(
+    weapon: &mut Vec<Self>,
+    commands: &mut Commands,
   ) {
-  fn fire(){
     
   }
+}
+
+fn weapon_data() -> Vec<WeaponInfo> {
+  let v: Value = serde_json::from_str(fs::read_to_string("data/weapon.json"));
+
+  for i in v {
+    
   }
 }
 
