@@ -2,6 +2,7 @@ use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 
 const CAMERA_SPEED: f32 = 2.0;
+const JUMP_STRENGTH: f32 = 5.0;
 
 /// # CameraPlugin
 /// Extremely basic plugin for player manipulation
@@ -15,9 +16,8 @@ pub struct CameraPlugin;
 
 impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(Camera::setup_camera)
-           .add_systems(Update, Camera::move_camera)
-           .add_systems(Update, Camera::camera_velocity_shrink);
+        app.add_systems(Startup, Camera::setup_camera)
+           .add_systems(Update, (Camera::move_camera, Camera::camera_velocity_shrink).chain())
     }
 }
 
@@ -36,7 +36,8 @@ impl Camera {
         ).insert(Velocity {
             linvel: Vec3::ZERO,
             angvel: Vec3::ZERO,
-        }).insert(Camera);
+        }).insert(Camera)
+          .insert(Character::new());
     }
 
     pub fn move_camera(
@@ -53,7 +54,7 @@ impl Camera {
                 KeyCode::KeyS => direction.z += 1.0,
                 KeyCode::KeyA => direction.x -= 1.0,
                 KeyCode::KeyD => direction.x += 1.0,
-                KeyCode::Space => camera_jump(&mut vel),
+                KeyCode::Space => camera_jump(&mut vel.linvel),
                 _ => {},
             }
         }
@@ -103,12 +104,12 @@ impl Camera {
     }
 }
 
-fn camera_jump(vel: &mut Velocity) {
+fn camera_jump(vel: &mut Vec3) {
     // Jumping is only allowed if not already jumping
-    if vel.linvel.y > 0.0 {
+    if vel.y > 0.0 {
         return;
     }
 
     // Apply jump velocity
-    vel.linvel.y += 5.0; // Adjust jump strength as needed
+    vel.y += JUMP_STRENGTH;
 }
