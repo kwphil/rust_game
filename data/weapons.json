@@ -1,1 +1,13 @@
+{
+  "knife": {
+    "range": 0,
+    "damage": 5,
+    "reload": 0.5,
+  },
 
+  "gun": {
+    "range": 300,
+    "damage": 30,
+    "reload": 10,
+  }
+}
