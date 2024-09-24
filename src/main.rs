@@ -3,6 +3,7 @@ use bevy_rapier3d::prelude::*;
 
 mod camera;
 mod platform;
+mod character;
 
 fn main() {
     App::new()
