@@ -30,11 +30,19 @@ impl Weapon {
 }
 
 fn weapon_data() -> Vec<WeaponInfo> {
-  let v: Value = serde_json::from_str(fs::read_to_string("data/weapon.json"));
+  let s: Value = serde_json::from_str(fs::read_to_string("data/weapon.json"));
+  let v: Vec<WeaponInfo> = Vec::new(); 
 
-  for i in v {
-    
+  for i in s["a"] {
+    v.push(WeaponInfo {
+      name: i["name"].clone(),
+      range: i["range"] as f32,
+      damage: i["damage"] as u8,
+      reload: i["reload"] as f32,
+    }
   }
+
+  v
 }
 
 pub enum WeaponType {
@@ -43,7 +51,6 @@ pub enum WeaponType {
 }
 
 pub struct WeaponInfo {
-  weapon_id: u8,
   name: String,
   range: f32,
   damage: u8,
