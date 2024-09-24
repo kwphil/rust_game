@@ -26,31 +26,33 @@ pub struct Camera;
 
 impl Camera {
     pub fn setup_camera(mut commands: Commands) {
-        commands.spawn((
+        commands.spawn(RigidBody::Dynamic).insert(
             Camera3dBundle {
                 transform: Transform::from_xyz(10.0, 12.0, 16.0)
                                      .looking_at(Vec3::ZERO, Vec3::Y),
                 ..Default::default()
-            },
-            Velocity(Vec3::ZERO),
-            Camera,
-        ));
+            }
+            ..Default::default()
+        ).insert(Velocity {
+            linvel: Vec3::ZERO,
+            angvel: Vec3::ZERO,
+        }).insert(Camera);
     }
 
     pub fn move_camera(
         keys: Res<Input<KeyCode>>,
-        mut camera_query: Query<&mut Velocity, With<Camera>>,
+        mut query: Query<&mut Velocity, With<Camera>>,
     ) {
-        let mut vel = camera_query.single_mut().unwrap();
+        let mut vel = query.single_mut();
 
         let mut direction = Vec3::ZERO;
         
         for key in keys.get_pressed() {
             match key {
-                KeyCode::W => direction.z -= 1.0,
-                KeyCode::S => direction.z += 1.0,
-                KeyCode::A => direction.x -= 1.0,
-                KeyCode::D => direction.x += 1.0,
+                KeyCode::KeyW => direction.z -= 1.0,
+                KeyCode::KeyS => direction.z += 1.0,
+                KeyCode::KeyA => direction.x -= 1.0,
+                KeyCode::KeyD => direction.x += 1.0,
                 KeyCode::Space => camera_jump(&mut vel),
                 _ => {},
             }
@@ -59,7 +61,7 @@ impl Camera {
         // Normalize direction and apply speed
         if direction != Vec3::ZERO {
             let normalized_direction = direction.normalize() * CAMERA_SPEED;
-            vel.0 += normalized_direction; // Update velocity
+            vel.linvel += normalized_direction; // Update velocity
         }
     }
 
@@ -67,11 +69,11 @@ impl Camera {
         mut camera_query: Query<(&mut Velocity, &Transform), With<Camera>>,
         rapier_context: Res<RapierContext>,
     ) {
-        let (mut vel, transform) = camera_query.single_mut().unwrap();
+        let (mut vel, transform) = camera_query.single_mut();
         
         // Dampen the velocities
-        vel.0.x *= 0.9;
-        vel.0.z *= 0.9;
+        vel.linvel.x *= 0.9;
+        vel.linvel.z *= 0.9;
 
         // Check if the camera is touching the floor
         let position = transform.translation;
@@ -86,7 +88,7 @@ impl Camera {
         for collider in intersecting {
             if collider.position.y >= below {
                 // Set Y velocity to zero if on the ground
-                vel.0.y = 0.0;
+                vel.linvel.y = 0.0;
                 break;
             }
         }
@@ -95,10 +97,10 @@ impl Camera {
 
 fn camera_jump(vel: &mut Velocity) {
     // Jumping is only allowed if not already jumping
-    if vel.0.y > 0.0 {
+    if vel.linvel.y > 0.0 {
         return;
     }
 
     // Apply jump velocity
-    vel.0.y += 5.0; // Adjust jump strength as needed
+    vel.linvel.y += 5.0; // Adjust jump strength as needed
 }
