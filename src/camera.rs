@@ -76,21 +76,8 @@ impl Camera {
         let dir = &mut vel;
 
         // Checking if velocities are exceeding what they need to be
-        if dir.x > 1.0 {
-            dir.x = 1.0;
-        }
-
-        if dir.x < -1.0 {
-            dir.x = -1.0;
-        }
-
-        if dir.z > 1.0 {
-            dir.z = 1.0;
-        }
-
-        if dir.z < -1.0 {
-            dir.z = 1.0;
-        }
+        dir.x.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+        dir.z.clamp(-CAMERA_SPEED, CAMERA_SPEED);
         
         // Dampen the velocities
         dir.x *= 0.5;
