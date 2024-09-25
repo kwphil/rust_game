@@ -14,7 +14,15 @@ pub fn move_char(
             KeyCode::KeyS => direction.z += 1.0,
             KeyCode::KeyA => direction.x -= 1.0,
             KeyCode::KeyD => direction.x += 1.0,
-            KeyCode::Space => camera_jump(&mut vel.linvel),
+            KeyCode::Space => {
+                // Jumping is only allowed if not already jumping
+                if vel.y != 0.0 {
+                    return;
+                }
+
+                // Apply jump velocity
+                vel.y += JUMP_STRENGTH;
+            },
             _ => {},
         }
     }

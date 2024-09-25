@@ -32,13 +32,3 @@ impl Camera {
           .insert(Character::new());
     }
 }
-
-fn camera_jump(vel: &mut Vec3) {
-    // Jumping is only allowed if not already jumping
-    if vel.y > 0.0 {
-        return;
-    }
-
-    // Apply jump velocity
-    vel.y += JUMP_STRENGTH;
-}
