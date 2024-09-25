@@ -1,0 +1,190 @@
+error: expected one of `)`, `,`, `.`, `?`, or an operator, found `Platform`
+  --> src\platform.rs:26:9
+   |
+25 |         Collider::cuboid(400.0, 25.0, 0.1)
+   |                                           -
+   |                                           |
+   |                                           expected one of `)`, `,`, `.`, `?`, or an operator
+   |                                           help: missing `,`
+26 |         Platform,
+   |         ^^^^^^^^ unexpected token
+
+error: expected expression, found `;`
+  --> src\character.rs:47:44
+   |
+47 |     let entity = /* Get your entity here */;
+   |                                            ^ expected expression
+
+error[E0583]: file not found for module `player`
+ --> src\character.rs:4:1
+  |
+4 | mod player;
+  | ^^^^^^^^^^^
+  |
+  = help: to create the module `player`, create file "src\character\player.rs" or "src\character\player\mod.rs"
+  = note: if there is a `mod player` elsewhere in the crate already, import it with `use crate::...` instead
+
+error[E0583]: file not found for module `camera`
+ --> src\character.rs:5:1
+  |
+5 | mod camera;
+  | ^^^^^^^^^^^
+  |
+  = help: to create the module `camera`, create file "src\character\camera.rs" or "src\character\camera\mod.rs"
+  = note: if there is a `mod camera` elsewhere in the crate already, import it with `use crate::...` instead
+
+error[E0433]: failed to resolve: use of undeclared type `Collider`
+  --> src\platform.rs:25:9
+   |
+25 |         Collider::cuboid(400.0, 25.0, 0.1)
+   |         ^^^^^^^^ use of undeclared type `Collider`
+   |
+help: consider importing one of these items
+   |
+1  + use bevy_rapier3d::prelude::Collider;
+   |
+1  + use crate::Collider;
+   |
+
+error[E0433]: failed to resolve: could not find `Camera` in `camera`
+  --> src\character.rs:11:42
+   |
+11 |         app.add_systems(Startup, camera::Camera::setup_camera)
+   |                                          ^^^^^^ could not find `Camera` in `camera`
+   |
+help: consider importing one of these items
+   |
+1  + use bevy::prelude::Camera;
+   |
+1  + use crate::Camera;
+   |
+help: if you import `Camera`, refer to it directly
+   |
+11 -         app.add_systems(Startup, camera::Camera::setup_camera)
+11 +         app.add_systems(Startup, Camera::setup_camera)
+   |
+
+error[E0425]: cannot find value `move_char` in module `player`
+  --> src\character.rs:12:59
+   |
+12 |            .add_systems(Update, (velocity_shrink, player::move_char));
+   |                                                           ^^^^^^^^^ not found in `player`
+
+error[E0425]: cannot find value `CAMERA_SPEED` in this scope
+  --> src\character.rs:34:18
+   |
+34 |     dir.x.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+   |                  ^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `CAMERA_SPEED` in this scope
+  --> src\character.rs:34:32
+   |
+34 |     dir.x.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+   |                                ^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `CAMERA_SPEED` in this scope
+  --> src\character.rs:35:18
+   |
+35 |     dir.z.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+   |                  ^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `CAMERA_SPEED` in this scope
+  --> src\character.rs:35:32
+   |
+35 |     dir.z.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+   |                                ^^^^^^^^^^^^ not found in this scope
+
+error[E0283]: type annotations needed: cannot satisfy `character::Character: Sync`
+   --> src\character.rs:17:12
+    |
+17  | pub struct Character {
+    |            ^^^^^^^^^
+    |
+    = note: cannot satisfy `character::Character: Sync`
+note: required by a bound in `bevy::prelude::Component`
+   --> C:\Users\26phillips.korben\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bevy_ecs-0.14.2\src\component.rs:158:29
+    |
+158 | pub trait Component: Send + Sync + 'static {
+    |                             ^^^^ required by this bound in `Component`
+
+error[E0599]: no method named `add_system` found for mutable reference `&mut bevy::prelude::App` in the current scope
+ --> src\platform.rs:7:13
+  |
+7 |         app.add_system(Startup, spawn_platform);
+  |             ^^^^^^^^^^
+  |
+help: there is a method `add_systems` with a similar name
+  |
+7 |         app.add_systems(Startup, spawn_platform);
+  |             ~~~~~~~~~~~
+
+warning: use of deprecated associated function `bevy::prelude::Color::rgb`: Use `Color::srgb` instead
+  --> src\platform.rs:18:31
+   |
+18 |                 color: Color::rgb(0.2, 0.8, 0.2),
+   |                               ^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+error[E0609]: no field `x` on type `&mut Mut<'_, bevy_rapier3d::dynamics::Velocity>`
+  --> src\character.rs:34:9
+   |
+34 |     dir.x.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+   |         ^ unknown field
+   |
+help: some of the expressions' fields have a field of the same name
+   |
+34 |     dir.angvel.x.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+   |         +++++++
+34 |     dir.linvel.x.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+   |         +++++++
+
+error[E0609]: no field `z` on type `&mut Mut<'_, bevy_rapier3d::dynamics::Velocity>`
+  --> src\character.rs:35:9
+   |
+35 |     dir.z.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+   |         ^ unknown field
+   |
+help: some of the expressions' fields have a field of the same name
+   |
+35 |     dir.angvel.z.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+   |         +++++++
+35 |     dir.linvel.z.clamp(-CAMERA_SPEED, CAMERA_SPEED);
+   |         +++++++
+
+error[E0609]: no field `x` on type `&mut Mut<'_, bevy_rapier3d::dynamics::Velocity>`
+  --> src\character.rs:38:9
+   |
+38 |     dir.x *= 0.5;
+   |         ^ unknown field
+   |
+help: some of the expressions' fields have a field of the same name
+   |
+38 |     dir.angvel.x *= 0.5;
+   |         +++++++
+38 |     dir.linvel.x *= 0.5;
+   |         +++++++
+
+error[E0609]: no field `z` on type `&mut Mut<'_, bevy_rapier3d::dynamics::Velocity>`
+  --> src\character.rs:39:9
+   |
+39 |     dir.z *= 0.5;
+   |         ^ unknown field
+   |
+help: some of the expressions' fields have a field of the same name
+   |
+39 |     dir.angvel.z *= 0.5;
+   |         +++++++
+39 |     dir.linvel.z *= 0.5;
+   |         +++++++
+
+error[E0433]: failed to resolve: use of undeclared crate or module `weapon`
+  --> src\character.rs:20:20
+   |
+20 |   pub weapons: Vec<weapon::Weapon>,
+   |                    ^^^^^^ use of undeclared crate or module `weapon`
+
+Some errors have detailed explanations: E0283, E0425, E0433, E0583, E0599, E0609.
+For more information about an error, try `rustc --explain E0283`.
+warning: `rust_game` (bin "rust_game") generated 1 warning
+error: could not compile `rust_game` (bin "rust_game") due to 18 previous errors; 1 warning emitted
